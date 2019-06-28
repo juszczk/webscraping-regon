@@ -31,13 +31,13 @@ for indNIP in numberNIP:
     fieldNIP = driver.find_element_by_id("txtNip")
     fieldNIP.send_keys(indNIP)
     driver.find_element_by_id("btnSzukaj").click()
-    driver.implicitly_wait(5) # wait or page will crash
+    driver.implicitly_wait(5)
     
     # unroll general list [1]
     xpathName = '//*[@id="divListaJednostek"]/table/tbody/tr/td[1]/a'
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpathName))) # javascript element
     driver.find_element_by_xpath(xpathName).click()
-    driver.implicitly_wait(5) # wait or page will crash
+    driver.implicitly_wait(5)
     
     # unroll PKD list [2]
     xpathPKD = '//*[@id="praw_butLinkDzial"]'
