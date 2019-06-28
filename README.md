@@ -1,3 +1,2 @@
 # webscraping-regon
-Bonus for Web Scraping and Social Media Scraping course. Scrape data from Statistics Poland Office website. 
-Target data, based on NIP number are: name, PKD code and PDK full name.
+Simple scraper for obtaining basic information about entities from Office of Statitics in Poland (https://stat.gov.pl/). Entities are searched through their NIP numbers, earlier proided in csv file with target entities.
