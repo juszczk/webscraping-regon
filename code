@@ -1,0 +1,68 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pandas as pd
+import time
+import csv
+
+
+# In[2]:
+
+
+data = pd.read_csv("Exercises4inputNIP.csv", sep = ";", encoding = "utf-8")
+
+numberNIP = data["NIP"].tolist()
+numberNIP
+
+
+# In[3]:
+
+
+driver = webdriver.Chrome("/Users/marinajuszczyk/chromedriver")
+driver.get("https://wyszukiwarkaregon.stat.gov.pl/appBIR/index.aspx")
+
+solution = pd.DataFrame(columns = ['Name', 'NIP', 'PKDCode', 'PKDName'])
+
+for indNIP in numberNIP:
+    
+    # enter NIP number
+    fieldNIP = driver.find_element_by_id("txtNip")
+    fieldNIP.send_keys(indNIP)
+    driver.find_element_by_id("btnSzukaj").click()
+    driver.implicitly_wait(5) # wait or page will crash
+    
+    # unroll general list [1]
+    xpathName = '//*[@id="divListaJednostek"]/table/tbody/tr/td[1]/a'
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpathName))) # javascript element
+    driver.find_element_by_xpath(xpathName).click()
+    driver.implicitly_wait(5) # wait or page will crash
+    
+    # unroll PKD list [2]
+    xpathPKD = '//*[@id="praw_butLinkDzial"]'
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, xpathPKD))) # javascript element
+    driver.find_element_by_xpath(xpathPKD).click()
+
+    # get company name, NIP and PKD code & name
+    name = driver.find_element_by_xpath('//*[@id="praw_nazwa"]').text
+    codeNIP = driver.find_element_by_xpath('//*[@id="praw_nip"]').text
+    codePKD = driver.find_element_by_xpath('//*[@id="praw_dzial"]/table[1]/tbody/tr/td[1]').text
+    namePKD = driver.find_element_by_xpath('//*[@id="praw_dzial"]/table[1]/tbody/tr/td[2]').text
+
+    solution = solution.append({'Name': name, 'NIP': codeNIP, 'PKDCode': codePKD, 'PKDName' : namePKD}, ignore_index = True)
+
+    driver.find_element_by_id("txtNip").clear()
+    time.sleep(3)
+
+
+# In[4]:
+
+
+solution.to_csv("WS_4bonus_Juszczyk.csv", sep=';', encoding='utf-8', index = False)
