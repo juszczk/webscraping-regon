@@ -2,8 +2,6 @@
 # coding: utf-8
 
 # In[1]:
-
-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -15,8 +13,6 @@ import csv
 
 
 # In[2]:
-
-
 data = pd.read_csv("Exercises4inputNIP.csv", sep = ";", encoding = "utf-8")
 
 numberNIP = data["NIP"].tolist()
@@ -24,8 +20,6 @@ numberNIP
 
 
 # In[3]:
-
-
 driver = webdriver.Chrome("/Users/marinajuszczyk/chromedriver")
 driver.get("https://wyszukiwarkaregon.stat.gov.pl/appBIR/index.aspx")
 
@@ -63,6 +57,4 @@ for indNIP in numberNIP:
 
 
 # In[4]:
-
-
 solution.to_csv("WS_4bonus_Juszczyk.csv", sep=';', encoding='utf-8', index = False)
